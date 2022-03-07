@@ -1,10 +1,8 @@
-import { Service, PlatformAccessory, CharacteristicValue, CharacteristicSetCallback, CharacteristicGetCallback } from 'homebridge';
+import { Service, PlatformAccessory } from 'homebridge';
 
 import { KomfoventPlatform } from './platform';
 
 export class KomfoventPlatformAccessory {
-  public deviceData: any;
-
 	private filterService!: Service
 	private supplyFanService!: Service
 	private supplyTempService!: Service
@@ -16,9 +14,7 @@ export class KomfoventPlatformAccessory {
     private readonly platform: KomfoventPlatform,
     private readonly accessory: PlatformAccessory,
   ) {
-    this.deviceData = this.accessory.context.device;
-
-    this.accessory.getService(this.platform.Service.AccessoryInformation)!
+    this.accessory.getService(this.platform.Service.AccessoryInformation)
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Komfovent')
       .setCharacteristic(this.platform.Characteristic.Model, 'DOMEKT')
       .setCharacteristic(this.platform.Characteristic.SerialNumber, '450R');
@@ -96,7 +92,7 @@ export class KomfoventPlatformAccessory {
   }
 
   public getFilterClogging() {
-    return parseFloat(this.platform.deviceData.V.FC._text.match(/[\d]+/))
+    return parseFloat(this.platform.deviceData.V.FC._text.match(/[\d]+/).toString())
   }
 
   public getIsFilterOk() {
@@ -105,22 +101,22 @@ export class KomfoventPlatformAccessory {
   }
 
   public getOutdoorTemp() {
-    return parseFloat(this.platform.deviceData.V.OT._text.match(/[\d\.]+/));
+    return parseFloat(this.platform.deviceData.V.OT._text.match(/[\d.]+/).toString());
   }
 
   public rotationSupplySpeed() {
-    return parseFloat(this.platform.deviceData.V.SF._text.match(/[\d]+/));
+    return parseFloat(this.platform.deviceData.V.SF._text.match(/[\d]+/).toString());
   }
 
   public rotationExhaustSpeed() {
-    return parseFloat(this.platform.deviceData.V.EF._text.match(/[\d]+/));
+    return parseFloat(this.platform.deviceData.V.EF._text.match(/[\d]+/).toString());
   }
 
   public getSupplyTemp() {
-    return parseFloat(this.platform.deviceData.V.ST._text.match(/[\d\.]+/));
+    return parseFloat(this.platform.deviceData.V.ST._text.match(/[\d.]+/).toString());
   }
 
   public getExhaustTemp() {
-    return parseFloat(this.platform.deviceData.V.ET._text.match(/[\d\.]+/));
+    return parseFloat(this.platform.deviceData.V.ET._text.match(/[\d.]+/).toString());
   }
 }

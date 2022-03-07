@@ -1,3 +1,7 @@
+
+/* eslint-disable no-async-promise-executor */
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 
 const axios = require('axios').default;
@@ -6,12 +10,21 @@ const convert = require("xml-js");
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { KomfoventPlatformAccessory } from './platformAccessory';
 
+type KomfoDetails = {
+  V: {
+    ET: {_text: string}
+    FC: {_text: string}
+    OT: {_text: string}
+    SF: {_text: string}
+    EF: {_text: string}
+    ST: {_text: string}
+  }
+}
+
 export class KomfoventPlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
   public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
-  apiClient: any;
-  deviceData: any;
-
+  public deviceData: KomfoDetails
   public readonly accessories: PlatformAccessory[] = [];
 
   constructor(
@@ -73,11 +86,11 @@ export class KomfoventPlatform implements DynamicPlatformPlugin {
     return new Promise<void>(async (resolve, reject) => {
       const url = '/det.asp'
       try {
-        this.apiClient = axios.create({
+        const apiClient = axios.create({
           baseURL: 'http://' + this.config['host'],
         })
     
-        const response = await this.apiClient.get(url);
+        const response = await apiClient.get(url);
         
         if (response.data.errorCode && response.data.errorCode != '0') {
           this.log.error('det.asp returned error', response.data);
