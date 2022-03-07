@@ -1,5 +1,4 @@
 {
-  "private": true,
   "displayName": "Homebridge Komfovent",
   "name": "homebridge-komfovent-air",
   "version": "1.0.0",
